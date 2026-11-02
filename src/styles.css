@@ -343,6 +343,28 @@ a {
   opacity: 0.75;
 }
 
+.projects-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9375rem;
+}
+.expand-all {
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.expand-all:hover {
+  border-color: var(--muted);
+}
+
 /* Project rows */
 .projects {
   list-style: none;

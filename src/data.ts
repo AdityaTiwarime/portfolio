@@ -26,12 +26,12 @@ export interface TraceSpan {
 // The hero's trace waterfall. The axis starts in 2025, so the degree span is clipped on the left.
 export const trace = {
   axisStart: "2025-01",
-  axisEnd: "2026-10",
+  axisEnd: "2026-11",
   spans: [
     { id: "gitam", label: "B.Tech, Computer Science Engineering", detail: "GITAM University", kind: "education", start: "2022-08", end: "2026-08" },
     { id: "pwc", label: "Software Engineering Trainee", detail: "PwC, Salesforce Launchpad", kind: "work", start: "2025-01", end: "2025-07" },
     { id: "altair", label: "Data Science Intern", detail: "Altair", kind: "internship", start: "2025-04", end: "2025-06" },
-    { id: "jtp", label: "System Engineer Trainee", detail: "JTP (Japan Third Party)", kind: "work", start: "2026-03", end: "2026-08" },
+    { id: "jtp", label: "System Engineer Trainee", detail: "JTP (Japan Third Party)", kind: "work", start: "2026-03", end: "2026-11" },
   ] satisfies TraceSpan[],
 };
 
@@ -42,6 +42,7 @@ export interface Job {
   dates: string;
   place: string;
   points: string[];
+  stack?: string[];
 }
 
 export const jobs: Job[] = [
@@ -49,14 +50,16 @@ export const jobs: Job[] = [
     id: "jtp",
     company: "JTP (Japan Third Party Co., Ltd.)",
     role: "System Engineer Trainee",
-    dates: "Mar 2026 – Aug 2026",
+    dates: "Mar 2026 – Nov 2026",
     place: "Remote from India",
     points: [
-      "Owned end-to-end delivery of a containerized movie recommendation service (React, FastAPI, PostgreSQL), from requirement analysis and design documents through implementation, testing and a formal technical review with the Japan-based team.",
-      "Designed 5 REST endpoints over a ~10,000-movie catalog, with TF-IDF and cosine-similarity ranking computed per query instead of holding an ~800 MB precomputed matrix in memory.",
-      "Cut poster loading time by fetching images in parallel on a 10-worker thread pool with caching, and shipped the stack as 3 Docker Compose services run with a single command.",
+      "Worked as a Systems Engineer on JTP's internal robotics automation projects, testing behaviour scripts for SoftBank NAO humanoid robots and diagnosing execution failures from runtime logs.",
+      "Built a Python log-parsing tool that scanned test-run logs to isolate failing behaviours and route error details to the owning developers, cutting manual log review.",
+      "Resolved client-reported bugs and software issues, reproducing each problem, identifying the root cause and delivering fixes, with written project reports to the Japan-based team.",
+      "Delivered a containerized content recommendation platform (React, FastAPI, PostgreSQL; 3 Docker Compose services, 5 REST endpoints) over a ~10,000-title catalog, with per-query TF-IDF ranking that avoids an ~800 MB precomputed matrix.",
       "Followed Japanese quality practices (PDCA, Kaizen, Horenso, 5S), reporting daily and folding review feedback into the design, code and documentation.",
     ],
+    stack: ["Python", "NAO robotics", "Machine Learning", "Pandas", "Scikit-Learn", "SQL", "FastAPI", "React", "PostgreSQL", "Docker", "Jenkins", "REST APIs", "Data Validation", "Git"],
   },
   {
     id: "altair",
@@ -67,7 +70,9 @@ export const jobs: Job[] = [
     points: [
       "Built ML classification and clustering pipelines in RapidMiner over 100K+ records, using cross-validation and hyperparameter tuning to reach 92% model accuracy.",
       "Automated preprocessing (correlation analysis, PCA, outlier removal), trimming feature dimensionality by ~30% and shortening experiment cycles by ~25%.",
+      "Turned findings into reports and Matplotlib/Seaborn charts explaining trends and business insights to non-technical stakeholders.",
     ],
+    stack: ["Altair RapidMiner Studio", "RapidMiner Server", "Process Pipelines", "CRISP-DM", "Python", "R", "SQL", "Machine Learning"],
   },
   {
     id: "pwc",
@@ -121,7 +126,7 @@ export const projects: Project[] = [
     metric: "32 JUnit + 4 Selenium tests",
     points: [
       "Two Spring Boot microservices that adjudicate claims over Apache Kafka: coverage dates, covered services, deductible, coinsurance and annual maximum decide approve, deny or pend.",
-      "Events published only after the database commit, idempotent decision handling, retries and a dead-letter topic. Claims live in MySQL (Flyway), the audit timeline in MongoDB.",
+      "Events published only after the database commit, idempotent decision handling, retries and a dead-letter topic. Polyglot persistence: MySQL with Flyway migrations for claims, members and plans, and MongoDB for an append-only audit timeline.",
       "GitHub Actions runs the JUnit and Selenium suites plus a Docker Compose smoke test against real MySQL, MongoDB and Kafka; logs ship to Splunk.",
     ],
     stack: ["Java", "Spring Boot", "Apache Kafka", "MySQL", "MongoDB", "JUnit 5", "Selenium", "Docker", "Splunk"],
@@ -135,7 +140,8 @@ export const projects: Project[] = [
     metric: "Live, 3 role-based portals",
     points: [
       "Patient, Doctor and Superadmin portals on a FastAPI REST backend and PostgreSQL, with bcrypt + JWT role-based auth, deployed with Docker on Render.",
-      "AI analysis of uploaded PDF and image reports, appointment booking and an anonymized QR emergency card, covered by 19 pytest API tests and Playwright end-to-end tests.",
+      "Provider-agnostic AI report analysis (Claude or OpenAI): PDF text extracted with pypdf and trimmed to fit model context limits, photographed reports sent to vision models, with per-user rate limiting.",
+      "Appointment booking and an anonymized QR emergency card, covered by 19 pytest API tests and Playwright end-to-end tests.",
     ],
     stack: ["Python", "FastAPI", "PostgreSQL", "JWT", "pytest", "Playwright", "Docker", "JavaScript"],
     repo: "https://github.com/AdityaTiwarime/medcard",
@@ -170,6 +176,20 @@ export const projects: Project[] = [
     repo: "https://github.com/AdityaTiwarime/movie-recommender",
   },
   {
+    id: "solvane",
+    name: "Solvane",
+    summary: "Desktop web browser for Windows",
+    area: "software",
+    metric: "72 tests, installer built in CI",
+    points: [
+      "Chromium-based desktop browser in Python (PyQt6 + Qt WebEngine) with tabs, a smart address bar, bookmarks, SQLite history, downloads, incognito profiles, dark mode and session restore.",
+      "Request-level ad and tracker blocker (150+ domains), internal pages protected from framing and script injection, and atomic file writes so a crash can't corrupt user data.",
+      "72 pytest tests including headless-Chromium integration tests; GitHub Actions builds a Windows installer (PyInstaller + Inno Setup) on every push.",
+    ],
+    stack: ["Python", "PyQt6", "Qt WebEngine", "SQLite", "pytest", "PyInstaller", "GitHub Actions"],
+    repo: "https://github.com/AdityaTiwarime/solvane-browser",
+  },
+  {
     id: "resilience",
     name: "RESILIENCE",
     summary: "Fraud-risk scoring with explanations and drift monitoring",
@@ -197,6 +217,18 @@ export const projects: Project[] = [
     stack: ["Python", "SQL", "PostgreSQL", "XGBoost", "LightGBM", "SHAP", "MLflow", "FastAPI", "OpenAI API", "Power BI"],
     repo: "https://github.com/AdityaTiwarime/churn-intelligence",
     live: "https://churn-intelligence-34rc.onrender.com/",
+  },
+  {
+    id: "retail",
+    name: "Retail Sales & Customer Analytics",
+    summary: "SQL analysis and an interactive Power BI dashboard",
+    area: "data",
+    metric: "RFM segments, DAX KPIs",
+    points: [
+      "Cleaned and modeled retail sales data in SQL, segmenting customers with RFM analysis using CTEs and window functions, and ran a t-test to check whether discounts truly lift sales.",
+      "Interactive Power BI dashboard with DAX measures for revenue, profit margin and YoY growth, with region and category drill-downs, plus an Excel pivot-table summary.",
+    ],
+    stack: ["SQL", "Power BI", "DAX", "MS Excel", "Python", "Pandas", "SciPy"],
   },
   {
     id: "krishibal",
@@ -232,18 +264,29 @@ export const projects: Project[] = [
 ];
 
 export const skills: { group: string; items: string[] }[] = [
-  { group: "Languages", items: ["Python", "Java", "JavaScript", "TypeScript", "SQL", "HTML5", "CSS3"] },
-  { group: "Front end", items: ["React", "Responsive layouts", "REST API integration", "Playwright"] },
-  { group: "Backend", items: ["Spring Boot", "Spring Data JPA", "FastAPI", "Apache Kafka", "REST APIs", "Microservices", "JWT"] },
-  { group: "Data and ML", items: ["Pandas", "Scikit-Learn", "XGBoost", "LightGBM", "SHAP", "PyTorch", "MLflow", "A/B testing"] },
-  { group: "Databases", items: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Flyway", "Query optimization"] },
-  { group: "Testing and delivery", items: ["JUnit 5", "Selenium", "pytest", "Locust", "Docker", "GitHub Actions", "OpenTelemetry", "Splunk"] },
+  { group: "Languages", items: ["Python", "Java", "JavaScript", "TypeScript", "SQL", "R (dplyr, ggplot2)", "HTML5", "CSS3"] },
+  { group: "Front end", items: ["React", "Responsive web design", "REST API integration", "Component-based UI"] },
+  { group: "Backend", items: ["Spring Boot", "Spring Data JPA", "Hibernate", "Spring Security", "FastAPI", "Flask", "Node.js", "Express.js", "REST APIs", "GraphQL", "Apache Kafka", "Microservices", "JWT auth"] },
+  { group: "Databases", items: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "SQLite", "BigQuery", "SQLAlchemy", "Flyway", "CTEs", "Window functions", "Joins", "Indexing", "Query optimization"] },
+  { group: "Machine learning", items: ["Scikit-Learn", "XGBoost", "LightGBM", "SHAP", "PyTorch", "TensorFlow", "Keras", "OpenCV", "ONNX Runtime", "Regression", "Classification", "Clustering", "Ensemble methods", "PCA", "Hyperparameter tuning", "Cross-validation", "Reinforcement learning"] },
+  { group: "Deep learning and NLP", items: ["CNN", "ResNet50", "Transfer learning", "NLP", "BERT"] },
+  { group: "GenAI and agents", items: ["LLMs", "OpenAI API", "Hugging Face Transformers", "LangChain", "RAG", "Agentic AI", "Prompt engineering", "GitHub Copilot"] },
+  { group: "Data analysis and statistics", items: ["Pandas", "NumPy", "PySpark", "EDA", "Data cleaning", "Data wrangling", "Feature engineering", "Outlier treatment", "Descriptive statistics", "Statistical modeling", "Hypothesis testing", "A/B testing", "Bootstrap CIs", "Time series forecasting (ARIMA)"] },
+  { group: "BI and visualization", items: ["Power BI (DAX, Power Query)", "Tableau", "Looker Studio", "Advanced Excel (Pivot Tables, XLOOKUP, Power Pivot)", "Google Sheets", "Matplotlib", "Seaborn", "Folium", "React dashboards", "CRM dashboards"] },
+  { group: "Data engineering and analytics", items: ["ETL", "Star schema", "CRISP-DM", "Airflow", "Databricks", "Data validation", "Data quality checks", "Cohort analysis", "RFM segmentation", "Funnel analysis", "Churn analysis", "KPI reporting", "Data storytelling"] },
+  { group: "MLOps", items: ["MLflow", "Model monitoring", "Data drift (PSI/KS)", "Model versioning"] },
+  { group: "Testing", items: ["JUnit 5", "Mockito", "Selenium", "Playwright", "pytest", "Locust", "API and regression testing"] },
+  { group: "Cloud and DevOps", items: ["AWS (EC2, S3, RDS, SageMaker)", "Docker", "Kubernetes", "Jenkins", "GitHub Actions (CI/CD)", "Prometheus", "Grafana", "Splunk", "OpenTelemetry", "Linux", "Bash", "Git", "Vercel", "Render"] },
+  { group: "Automation", items: ["Power Automate Desktop", "Power Automate AI Builder", "Copilot Studio", "UiPath", "RPA migration"] },
+  { group: "Tools", items: ["Jupyter Notebook", "Google Colab", "RapidMiner Studio and Server", "Kaggle", "Salesforce CRM"] },
+  { group: "Core CS", items: ["Data structures and algorithms", "OOP", "Design patterns", "Multithreading", "System design", "Distributed systems", "DBMS", "Operating systems", "Computer networks"] },
+  { group: "Ways of working", items: ["SDLC", "Agile/Scrum", "Kanban", "Code reviews", "Secure coding", "OWASP", "PDCA", "Troubleshooting"] },
 ];
 
 export const credentials = {
   education: {
     school: "GITAM University, Visakhapatnam",
-    degree: "B.Tech in Computer Science Engineering",
+    degree: "B.Tech in Computer Science Engineering (Graduated 2026)",
     dates: "2022 – 2026",
     grade: "CGPA 7.44",
   },

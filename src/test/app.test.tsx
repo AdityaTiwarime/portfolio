@@ -33,15 +33,27 @@ describe("portfolio page", () => {
     expect(screen.getByText("RESILIENCE")).toBeInTheDocument();
   });
 
-  it("expands one project at a time", async () => {
+  it("expand all opens every project", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole("button", { name: "Expand all" }));
+    const toggles = screen.getAllByRole("button", { expanded: true });
+    expect(toggles).toHaveLength(projects.length);
+    expect(screen.getByRole("button", { name: "Collapse all" })).toBeInTheDocument();
+  });
+
+  it("opens and closes a project", async () => {
     const user = userEvent.setup();
     render(<App />);
     const claimflow = screen.getByRole("button", { name: /ClaimFlow/ });
     expect(claimflow).toHaveAttribute("aria-expanded", "false");
     await user.click(claimflow);
     expect(claimflow).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByRole("button", { name: /ServScope/ })).toHaveAttribute("aria-expanded", "false");
-    expect(screen.getAllByRole("link", { name: "Read the code on GitHub" })[0]).toHaveAttribute(
+    await user.click(claimflow);
+    expect(claimflow).toHaveAttribute("aria-expanded", "false");
+    await user.click(claimflow);
+    const panel = document.getElementById(claimflow.getAttribute("aria-controls")!)!;
+    expect(within(panel).getByRole("link", { name: "Read the code on GitHub" })).toHaveAttribute(
       "href",
       "https://github.com/AdityaTiwarime/claimflow",
     );
@@ -49,7 +61,7 @@ describe("portfolio page", () => {
 
   it("trace spans are buttons that describe where they lead", () => {
     render(<App />);
-    expect(screen.getByRole("button", { name: /System Engineer Trainee, JTP.*6 mo/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /System Engineer Trainee, JTP.*9 mo/ })).toBeInTheDocument();
   });
 
   it("offers every resume as a download", () => {

@@ -11,8 +11,17 @@ const FILTERS: { value: Filter; label: string }[] = [
 
 export function Projects() {
   const [filter, setFilter] = useState<Filter>("all");
-  const [open, setOpen] = useState<string | null>("servscope");
+  const [open, setOpen] = useState<Set<string>>(() => new Set(["servscope"]));
   const shown = projects.filter((p) => filter === "all" || p.area === filter);
+  const allOpen = shown.every((p) => open.has(p.id));
+  const toggle = (id: string) =>
+    setOpen((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  const toggleAll = () => setOpen(allOpen ? new Set() : new Set(projects.map((p) => p.id)));
 
   return (
     <section className="section" id="projects" aria-labelledby="projects-title">
@@ -36,10 +45,16 @@ export function Projects() {
             ))}
           </div>
         </div>
+        <p className="projects-tools">
+          <span className="muted">{shown.length} projects. Select one to see details, code and live links.</span>
+          <button type="button" className="expand-all" onClick={toggleAll}>
+            {allOpen ? "Collapse all" : "Expand all"}
+          </button>
+        </p>
 
         <ul className="projects">
           {shown.map((p) => {
-            const isOpen = open === p.id;
+            const isOpen = open.has(p.id);
             const panelId = `project-${p.id}-details`;
             return (
               <li key={p.id} className={`project${isOpen ? " is-open" : ""}`}>
@@ -49,7 +64,7 @@ export function Projects() {
                     className="project-toggle"
                     aria-expanded={isOpen}
                     aria-controls={panelId}
-                    onClick={() => setOpen(isOpen ? null : p.id)}
+                    onClick={() => toggle(p.id)}
                   >
                     <span className="project-name">{p.name}</span>
                     <span className="project-summary">{p.summary}</span>

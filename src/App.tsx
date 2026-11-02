@@ -41,6 +41,13 @@ export function App() {
                       <li key={pt}>{pt}</li>
                     ))}
                   </ul>
+                  {j.stack && (
+                    <ul className="stack" aria-label="Tech stack">
+                      {j.stack.map((t) => (
+                        <li key={t}>{t}</li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
             </ol>
